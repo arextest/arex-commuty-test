@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO">
+
+    <Properties>
+        <Property name="pattern">%d{yyyy-MM-dd HH:mm:ss,SSS} %5p %c{1}:%L - %m%n</Property>
+        <Property name="logDir">./logs</Property>
+        <Property name="appName">arex-community-test</Property>
+    </Properties>
+
+    <Appenders>
+        <!-- output to console -->
+        <Console name="console" target="SYSTEM_OUT" follow="true">
+            <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout>
+                <Pattern>${pattern}</Pattern>
+            </PatternLayout>
+        </Console>
+        <!-- output to file -->
+        <RollingFile name="rolling_file"
+                     fileName="${logDir}/${appName}.log"
+                     filePattern="${logDir}/${appName}_%d{yyyy-MM-dd}.log">
+            <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout>
+                <Pattern>${pattern}</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1"/>
+            </Policies>
+            <!-- keep log file for 7 days -->
+            <DefaultRolloverStrategy>
+                <Delete basePath="${logDir}/" maxDepth="1">
+                    <IfFileName glob="${appName}_*.log" />
+                    <IfLastModified age="7d" />
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <logger name="org.springframework" level="INFO">
+        </logger>
+        <logger name="org.mybatis" level="INFO">
+        </logger>
+        <Root level="all">
+            <AppenderRef ref="console"/>
+            <AppenderRef ref="rolling_file"/>
+        </Root>
+    </Loggers>
+
+</Configuration>
