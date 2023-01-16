@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.arextest.agent.test.mapper.UserMapper">
+
+    <!--public Account getAcct(Long id);-->
+    <select id="findRoles" resultType="com.arextest.agent.test.entity.Role">
+        SELECT
+            *
+        FROM
+            user u
+                LEFT JOIN
+            user_role ur ON u.id = ur.uid
+                LEFT JOIN
+            role r ON ur.rid = r.id
+        WHERE
+            u.id = #{userId}
+    </select>
+
+</mapper>

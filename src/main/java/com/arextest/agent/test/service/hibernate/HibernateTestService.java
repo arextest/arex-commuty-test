@@ -1,6 +1,6 @@
 package com.arextest.agent.test.service.hibernate;
 
-import com.arextest.agent.test.entity.User;
+import com.arextest.agent.test.entity.TestUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Component;
@@ -19,63 +19,63 @@ public class HibernateTestService {
     HibernateRepository hibernateRepository;
 
     public String testHibernateSave() {
-        User user = new User();
-        user.setName("Lily");
-        user.setAge(18);
-        User result = hibernateRepository.save(user);
+        TestUser testUser = new TestUser();
+        testUser.setName("Lily");
+        testUser.setAge(18);
+        TestUser result = hibernateRepository.save(testUser);
         return String.format("testHibernateSave response: %s", result.toString());
     }
 
     public String testHibernateDelete() {
-        List<User> users = prepareTestItems();
-        int beforeDel = users.size();
-        User user = users.get(0);
-        hibernateRepository.delete(user);
-        return String.format("size before delete: %s, size after delete: %s, deleted user: %s", beforeDel, beforeDel - 1, user.toString());
+        List<TestUser> testUsers = prepareTestItems();
+        int beforeDel = testUsers.size();
+        TestUser testUser = testUsers.get(0);
+        hibernateRepository.delete(testUser);
+        return String.format("size before delete: %s, size after delete: %s, deleted user: %s", beforeDel, beforeDel - 1, testUser.toString());
     }
 
     public String testHibernateFindById() {
-        List<User> users = prepareTestItems();
-        Optional<User> user = hibernateRepository.findById(users.get(0).getId());
+        List<TestUser> testUsers = prepareTestItems();
+        Optional<TestUser> user = hibernateRepository.findById(testUsers.get(0).getId());
         return String.format("testHibernateFindById response: %s", user.toString());
     }
 
     public String testHibernateSaveAll() {
-        List<User> users = getTestItems();
-        List<User> result = hibernateRepository.saveAll(users);
+        List<TestUser> testUsers = getTestItems();
+        List<TestUser> result = hibernateRepository.saveAll(testUsers);
         return String.format("testHibernateSave response: %s", result.toString());
     }
 
     public String testHibernateFindAll() {
         prepareTestItems();
-        List<User> result = hibernateRepository.findAll();
+        List<TestUser> result = hibernateRepository.findAll();
         return String.format("testHibernateFindAll response: %s", result.toString());
     }
 
     public String testHibernateFindAllWithExample() {
         prepareTestItems();
-        User user = new User();
-        user.setName("Jack");
-        user.setAge(20);
-        List<User> result = hibernateRepository.findAll(Example.of(user));
+        TestUser testUser = new TestUser();
+        testUser.setName("Jack");
+        testUser.setAge(20);
+        List<TestUser> result = hibernateRepository.findAll(Example.of(testUser));
         return String.format("testHibernateFindAll response: %s", result.toString());
     }
 
-    private List<User> prepareTestItems() {
-        List<User> users = getTestItems();
-        return hibernateRepository.saveAll(users);
+    private List<TestUser> prepareTestItems() {
+        List<TestUser> testUsers = getTestItems();
+        return hibernateRepository.saveAll(testUsers);
     }
 
-    public List<User> getTestItems() {
-        List<User> users = new ArrayList<>();
-        User user = new User();
-        user.setName("Kite");
-        user.setAge(19);
-        users.add(user);
-        User user2 = new User();
-        user2.setName("Jack");
-        user2.setAge(20);
-        users.add(user2);
-        return users;
+    public List<TestUser> getTestItems() {
+        List<TestUser> testUsers = new ArrayList<>();
+        TestUser testUser = new TestUser();
+        testUser.setName("Kite");
+        testUser.setAge(19);
+        testUsers.add(testUser);
+        TestUser testUser2 = new TestUser();
+        testUser2.setName("Jack");
+        testUser2.setAge(20);
+        testUsers.add(testUser2);
+        return testUsers;
     }
 }
