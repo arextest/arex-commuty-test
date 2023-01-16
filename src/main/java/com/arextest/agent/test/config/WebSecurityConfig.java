@@ -17,6 +17,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.UUID;
 
 /**
@@ -49,6 +50,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/db/**")
                 .access("hasRole('dba') and hasRole('admin')")
                 .and()
+                .exceptionHandling().authenticationEntryPoint(new UnauthorizedEntryPoint()).and()
                 .formLogin()
                 .loginProcessingUrl("/login")
                 .permitAll()
@@ -77,7 +79,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutSuccessHandler(new LogoutSuccessHandler() {
                     @Override
                     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
-                        response.sendRedirect("/login");
+                        response.setCharacterEncoding("utf-8");
+                        PrintWriter writer = response.getWriter();
+                        writer.write("{\"response\":\"logout successfully\"}");
+                        writer.flush();
+                        writer.close();
                     }
                 })
                 .and()

@@ -14,20 +14,20 @@ import org.springframework.web.bind.annotation.RestController;
 public class HelloController {
     @GetMapping("/admin/hello")
     public String admin(){
-        return "hello admin";
+        return "{\"response\":\"hello admin\"}";
     }
     @GetMapping("/user/hello")
     public String user(){
-        return "hello user";
+        return "{\"response\":\"hello user\"}";
     }
     @GetMapping("/db/hello")
     public String dba(){
-        return "hello dba";
+        return "{\"response\":\"hello dba\"}";
     }
     @GetMapping("/hello")
     public String hello(){
         SecurityContext context = SecurityContextHolder.getContext();
         Authentication authentication = context.getAuthentication();
-        return "Hello," + authentication.getName() + "!";
+        return "{\"response\":\"Hello, " + authentication.getName() + "!\"}";
     }
 }

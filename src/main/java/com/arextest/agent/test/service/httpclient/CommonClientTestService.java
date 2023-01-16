@@ -46,7 +46,7 @@ public class CommonClientTestService extends HttpClientTestServiceBase{
             connection.setDoOutput(true);
 
             connection.setConnectTimeout(15000);
-            connection.setReadTimeout(1000);
+            connection.setReadTimeout(10000);
             connection.setDoInput(true);
             connection.setRequestProperty("Content-Type", "application/json");
 
