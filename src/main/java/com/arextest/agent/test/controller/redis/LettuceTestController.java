@@ -1,8 +1,11 @@
 package com.arextest.agent.test.controller.redis;
 
+import com.arextest.agent.test.entity.Request;
 import com.arextest.agent.test.service.redis.LettuceTestService;
+import jodd.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -15,7 +18,8 @@ public class LettuceTestController {
 
     @RequestMapping(value = "/renameException")
     @ResponseBody
-    public String testRenameException() {
-        return lettuceTestService.testRenameException();
+    public String testRenameException(@RequestBody Request request) {
+        String param = (request == null || StringUtil.isBlank(request.getInput())  ) ? "hkey1" : request.getInput();
+        return lettuceTestService.testRenameException(param);
     }
 }

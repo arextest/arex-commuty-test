@@ -43,10 +43,10 @@ public class JedisTestService {
     private static final byte[] TEST_REDIS_BYTE_VALUE = "testByteValue".getBytes(StandardCharsets.UTF_8);
     private static final byte[] TEST_REDIS_BYTE_VALUE2 = "testByteValue2".getBytes(StandardCharsets.UTF_8);
 
-    public String testSet() {
+    public String testSet(String parameterData) {
         try (Jedis jedis = jedisPool.getResource()) {
-            String stringSet = setStringKey1(jedis);
-            String byteSet = setByteKey1(jedis);
+            String stringSet = setStringKey1(jedis) + parameterData;
+            String byteSet = setByteKey1(jedis) + parameterData;
             return String.format("stringSet: %s, byteSet: %s", stringSet, byteSet);
         }
     }

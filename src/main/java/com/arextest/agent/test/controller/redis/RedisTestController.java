@@ -1,9 +1,12 @@
 package com.arextest.agent.test.controller.redis;
 
 import com.arextest.agent.test.config.RedisConfig;
+import com.arextest.agent.test.entity.Request;
 import com.arextest.agent.test.service.redis.JedisTestService;
+import jodd.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import javax.annotation.PostConstruct;
@@ -27,8 +30,9 @@ public class RedisTestController {
 
     @RequestMapping(value = "/jedis/set")
     @ResponseBody
-    public String testRedisSet() {
-        return jedisTestService.testSet();
+    public String testRedisSet(@RequestBody Request request) {
+        String param = (request == null || StringUtil.isBlank(request.getInput())  ) ? "" : request.getInput();
+        return jedisTestService.testSet(param);
     }
 
     @RequestMapping(value = "/jedis/setWithParams")

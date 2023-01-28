@@ -41,9 +41,9 @@ public class LettuceTestService {
     }
 
 
-    public String testRenameException() {
+    public String testRenameException(String parameterData) {
         try {
-            Flux<String> flux = reactiveCommands.hkeys("hkey1");
+            Flux<String> flux = reactiveCommands.hkeys(parameterData);
             return "flux result: " + flux.blockFirst();
         } catch (Exception e) {
             return "rename exception, message: " + e.getMessage();

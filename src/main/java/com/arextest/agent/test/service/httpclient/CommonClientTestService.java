@@ -18,13 +18,13 @@ import java.nio.charset.StandardCharsets;
 @Component
 public class CommonClientTestService extends HttpClientTestServiceBase{
 
-    public String commonClientTest() {
-        String commonHttpClientGetResponse = commonHttpClient(HttpMethodEnum.GET);
-        String commonHttpClientPostResponse = commonHttpClient(HttpMethodEnum.POST);
+    public String commonClientTest(String parameterData) {
+        String commonHttpClientGetResponse = commonHttpClient(HttpMethodEnum.GET, parameterData);
+        String commonHttpClientPostResponse = commonHttpClient(HttpMethodEnum.POST, parameterData);
         return String.format("commonClientGetResponse: %s, commonHttpClientPostResponse: %s", commonHttpClientGetResponse, commonHttpClientPostResponse);
     }
 
-    private String commonHttpClient(HttpMethodEnum type) {
+    private String commonHttpClient(HttpMethodEnum type, String parameterData) {
         HttpURLConnection connection;
         String result = null;
 
@@ -51,7 +51,7 @@ public class CommonClientTestService extends HttpClientTestServiceBase{
             connection.setRequestProperty("Content-Type", "application/json");
 
             if (type.equals(HttpMethodEnum.POST)) {
-                String parameterData = "{\"userId\": 3, \"title\": \"Programmer\", \"body\":\"C++\"}";
+//                String parameterData = "{\"userId\": 3, \"title\": \"Programmer\", \"body\":\"C++\"}";
                 DataOutputStream dataOutputStream = new DataOutputStream(connection.getOutputStream());
                 byte[] t = parameterData.getBytes(StandardCharsets.UTF_8);
                 dataOutputStream.write(t);

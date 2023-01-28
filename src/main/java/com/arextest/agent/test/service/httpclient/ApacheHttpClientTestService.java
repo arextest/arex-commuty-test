@@ -1,5 +1,6 @@
 package com.arextest.agent.test.service.httpclient;
 
+import jodd.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -35,13 +36,13 @@ import java.util.concurrent.ExecutionException;
 public class ApacheHttpClientTestService extends HttpClientTestServiceBase {
     private CloseableHttpAsyncClient HTTP_ASYNC_CLIENT;
 
-    public String test() {
+    public String test(String parameterData) {
         String asyncGetResponse = "", asyncPostResponse = "";
         try {
             HTTP_ASYNC_CLIENT = HttpAsyncClients.createDefault();
             HTTP_ASYNC_CLIENT.start();
             asyncGetResponse = "asyncGet response: " + asyncGet().get();
-            asyncPostResponse = "asyncPost response: " + asyncPost().get();
+            asyncPostResponse = "asyncPost response: " + asyncPost(parameterData).get();
         } catch (Exception ex) {
             log.error("ApacheHttpClientTestService exception", ex);
         } finally {
@@ -111,12 +112,17 @@ public class ApacheHttpClientTestService extends HttpClientTestServiceBase {
         return asyncExecute(httpGet);
     }
 
-    private CompletableFuture<String> asyncPost() {
+    private CompletableFuture<String> asyncPost(String parameterData) {
         HttpPost httpPost = new HttpPost(POST_URL);
         List<NameValuePair> list = new LinkedList<>();
         list.add( new BasicNameValuePair("userId","4" ));
         list.add( new BasicNameValuePair("title","Delphi" ));
         list.add( new BasicNameValuePair("body","Starter" ));
+
+        if(StringUtil.isNotBlank(parameterData) && StringUtil.isNotEmpty(parameterData)){
+            list.add( new BasicNameValuePair("input", parameterData ));
+        }
+
         UrlEncodedFormEntity entityParam = null;
         try {
             entityParam = new UrlEncodedFormEntity(list, "UTF-8");

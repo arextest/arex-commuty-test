@@ -19,10 +19,10 @@ public class RestTemplateTestService extends HttpClientTestServiceBase{
 
     private static String asyncGetResponse, asyncPostResponse;
 
-    public String restTemplateTest() throws InterruptedException {
-        asyncRestTemplate();
-        String getResponse = restTemplate(HttpMethodEnum.GET);
-        String postResponse = restTemplate(HttpMethodEnum.POST);
+    public String restTemplateTest(String parameterData) throws InterruptedException {
+        asyncRestTemplate(parameterData);
+        String getResponse = restTemplate(HttpMethodEnum.GET, parameterData);
+        String postResponse = restTemplate(HttpMethodEnum.POST, parameterData);
         Thread.sleep(1000); // wait async operation finish
         StringBuilder sb = new StringBuilder();
         sb.append(String.format("restTemplate get response: %s, restTemplate post response: %s", getResponse, postResponse));
@@ -30,7 +30,7 @@ public class RestTemplateTestService extends HttpClientTestServiceBase{
         return sb.toString();
     }
 
-    private String restTemplate(HttpMethodEnum type) {
+    private String restTemplate(HttpMethodEnum type, String input) {
         RestTemplate restTemplate = new RestTemplate();
         String response = "";
         if (type.equals(HttpMethodEnum.GET)) {
@@ -42,6 +42,7 @@ public class RestTemplateTestService extends HttpClientTestServiceBase{
             map.put("userId", 2);
             map.put("title", "php");
             map.put("body", "web");
+            map.put("input", input);
             response = restTemplate.postForObject(POST_URL, map, String.class);
         }
 
@@ -52,7 +53,7 @@ public class RestTemplateTestService extends HttpClientTestServiceBase{
      * Async invoke. AsyncRestTemplate is deprecated, instead use the WebClient
      * @return
      */
-    private void asyncRestTemplate() {
+    private void asyncRestTemplate(String input) {
         asyncGetResponse = "";
         WebClient webClient = WebClient.create();
 
@@ -65,6 +66,7 @@ public class RestTemplateTestService extends HttpClientTestServiceBase{
         map.add("userId", "1");
         map.add("title", "java");
         map.add("body", "spring");
+        map.add("input", input);
         mono = webClient.post().uri(POST_URL).body(BodyInserters.fromFormData(map)).retrieve().bodyToMono(String.class);
         mono.subscribe(RestTemplateTestService::handleAsyncPostResponse);
     }

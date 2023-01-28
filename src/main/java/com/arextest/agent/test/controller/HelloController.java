@@ -1,7 +1,8 @@
 package com.arextest.agent.test.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.arextest.agent.test.entity.Request;
+import jodd.util.StringUtil;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author daixq
@@ -24,5 +25,30 @@ public class HelloController {
     @GetMapping("/hello")
     public String hello(){
         return "{\"response\":\"welcome\"}";
+    }
+
+    @RequestMapping(value = "/admin/hello")
+    @ResponseBody
+    public String adminPost(@RequestBody Request request){
+        String param = (request == null || StringUtil.isBlank(request.getInput())) ? "admin" : request.getInput();
+        return "{\"response\":\"hello \""+ param +"}";
+    }
+    @RequestMapping(value = "/user/hello")
+    @ResponseBody
+    public String userPost(@RequestBody Request request){
+        String param = (request == null || StringUtil.isBlank(request.getInput())) ? "user" : request.getInput();
+        return "{\"response\":\"hello \""+ param +"}";
+    }
+    @RequestMapping(value = "/db/hello")
+    @ResponseBody
+    public String dbaPost(@RequestBody Request request){
+        String param = (request == null || StringUtil.isBlank(request.getInput())) ? "dba" : request.getInput();
+        return "{\"response\":\"hello \""+ param +"}";
+    }
+    @RequestMapping(value = "/hello")
+    @ResponseBody
+    public String helloPost(@RequestBody Request request){
+        String param = (request == null || StringUtil.isBlank(request.getInput())) ? "welcome" : request.getInput();
+        return "{\"response\":\"hello \""+ param +"}";
     }
 }

@@ -34,9 +34,9 @@ public class HibernateTestService {
         return String.format("size before delete: %s, size after delete: %s, deleted user: %s", beforeDel, beforeDel - 1, testUser.toString());
     }
 
-    public String testHibernateFindById() {
+    public String testHibernateFindById(Integer userId) {
         List<TestUser> testUsers = prepareTestItems();
-        Optional<TestUser> user = hibernateRepository.findById(testUsers.get(0).getId());
+        Optional<TestUser> user = hibernateRepository.findById(testUsers.get(userId).getId());
         return String.format("testHibernateFindById response: %s", user.toString());
     }
 

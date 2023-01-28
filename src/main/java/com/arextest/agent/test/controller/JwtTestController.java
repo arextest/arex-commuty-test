@@ -1,8 +1,11 @@
 package com.arextest.agent.test.controller;
 
+import com.arextest.agent.test.entity.Request;
 import com.arextest.agent.test.service.jwt.JwtTestService;
+import jodd.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -19,7 +22,8 @@ public class JwtTestController {
 
     @RequestMapping (value = "/jwt")
     @ResponseBody
-    public String jwtTest() {
-        return jwtTestService.testJwt();
+    public String jwtTest(@RequestBody Request request) {
+        String param = (request == null || StringUtil.isBlank(request.getInput())  ) ? "credential" : request.getInput();
+        return jwtTestService.testJwt(param);
     }
 }

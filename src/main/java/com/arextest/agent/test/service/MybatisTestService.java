@@ -18,10 +18,10 @@ public class MybatisTestService {
     @Autowired
     MybatisPlusMapper plusMapper;
 
-    public String testMybatisQuery() {
+    public String testMybatisQuery(String parameterData) {
         try {
             QueryWrapper<Mealrecomrestaurant> queryWrapper = new QueryWrapper<>();
-            queryWrapper.lambda().eq(Mealrecomrestaurant::getDishName, "ravioli");
+            queryWrapper.lambda().eq(Mealrecomrestaurant::getDishName, parameterData);
             List<Mealrecomrestaurant> mealrecomrestaurants = plusMapper.selectList(queryWrapper);
             return String.format("testMybatisQuery response: %s", mealrecomrestaurants.toString());
         } catch (Throwable ex) {

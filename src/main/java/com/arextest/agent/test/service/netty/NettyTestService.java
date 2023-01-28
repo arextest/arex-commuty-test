@@ -17,8 +17,8 @@ public class NettyTestService {
 
     private static final String ERR_ILLEGAL_LEN = "IllegalAccessException for FixedLengthFrameDecoder";
 
-    public String nettyTest() {
-        String inboundResponse = inboundTest();
+    public String nettyTest(String inputStr) {
+        String inboundResponse = inboundTest(inputStr);
         String outboundResponse = outboundTest();
         return String.format("inbound response: %s, outbound response: %s", inboundResponse, outboundResponse);
     }
@@ -26,8 +26,8 @@ public class NettyTestService {
     /**
      * test in message
      */
-    public String inboundTest() {
-        ByteBuf buf = Unpooled.copiedBuffer("Hello World!", CharsetUtil.UTF_8);
+    public String inboundTest(String inputStr) {
+        ByteBuf buf = Unpooled.copiedBuffer(inputStr, CharsetUtil.UTF_8);
         ByteBuf input = buf.duplicate();
 
         EmbeddedChannel channel;

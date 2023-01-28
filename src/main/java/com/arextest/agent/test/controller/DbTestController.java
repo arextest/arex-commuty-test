@@ -1,11 +1,14 @@
 package com.arextest.agent.test.controller;
 
 import com.arextest.agent.test.entity.Mealrecomrestaurant;
+import com.arextest.agent.test.entity.Request;
 import com.arextest.agent.test.service.MybatisTestService;
 
 import com.arextest.agent.test.service.hibernate.HibernateTestService;
+import jodd.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -25,8 +28,9 @@ public class DbTestController {
 
     @RequestMapping (value = "/mybatis/query")
     @ResponseBody
-    public String mybatisQueryTest() {
-        return mybatisTestService.testMybatisQuery();
+    public String mybatisQueryTest(@RequestBody Request request) {
+        String param = (request == null || StringUtil.isBlank(request.getInput())  ) ? "ravioli" : request.getInput();
+        return mybatisTestService.testMybatisQuery(param);
     }
 
     @RequestMapping  (value = "/mybatis/insert")
@@ -85,7 +89,8 @@ public class DbTestController {
 
     @RequestMapping (value = "/hibernate/findById")
     @ResponseBody
-    public String hibernateFindByIdTest() {
-        return hibernateTestService.testHibernateFindById();
+    public String hibernateFindByIdTest(@RequestBody Request request) {
+        String param = (request == null || StringUtil.isBlank(request.getInput())  ) ? "0" : request.getInput();
+        return hibernateTestService.testHibernateFindById(Integer.parseInt(param));
     }
 }

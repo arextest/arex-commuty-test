@@ -1,8 +1,11 @@
 package com.arextest.agent.test.controller.redis;
 
+import com.arextest.agent.test.entity.Request;
 import com.arextest.agent.test.service.redis.RedissionTestService;
+import jodd.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -18,14 +21,16 @@ public class RedissionTestController {
 
     @RequestMapping(value = "/getList")
     @ResponseBody
-    public String testGetList() {
-        return redissionTestService.testGetList();
+    public String testGetList(@RequestBody Request request) {
+        String param = (request == null || StringUtil.isBlank(request.getInput())  ) ? "my-list" : request.getInput();
+        return redissionTestService.testGetList(param);
     }
 
     @RequestMapping(value = "/getLock")
     @ResponseBody
-    public String testGetLock() {
-        return redissionTestService.testGetLock();
+    public String testGetLock(@RequestBody Request request) {
+        String param = (request == null || StringUtil.isBlank(request.getInput())  ) ? "my-lock" : request.getInput();
+        return redissionTestService.testGetLock(param);
     }
 
     @RequestMapping(value = "/getId")

@@ -15,8 +15,8 @@ import java.util.HashMap;
  */
 @Component
 public class JwtTestService {
-    private static final String SECRET_NAME = "credential";
-    public String testJwt() {
+
+    public String testJwt(String SECRET_NAME) {
         String token = createToken(SECRET_NAME);
         JWTVerifier credentialVerifier = JWT.require(Algorithm.HMAC256(SECRET_NAME)).build();
         DecodedJWT decodedCredential = credentialVerifier.verify(token);

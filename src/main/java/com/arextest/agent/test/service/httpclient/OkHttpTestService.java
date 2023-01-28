@@ -19,11 +19,11 @@ public class OkHttpTestService extends HttpClientTestServiceBase{
 //        .readTimeout(1, TimeUnit.MILLISECONDS)
         .build();;
 
-    public String okHttpTest() {
+    public String okHttpTest(String parameterData) {
         String asyncGetResponse = asyncGet();
-        String asyncPostResponse = asyncPost();
+        String asyncPostResponse = asyncPost(parameterData);
         String syncGetResponse = syncGet();
-        String syncPostResponse = syncPost();
+        String syncPostResponse = syncPost(parameterData);
 
         String builder = asyncGetResponse + "\n" +
                 asyncPostResponse + "\n" +
@@ -56,11 +56,12 @@ public class OkHttpTestService extends HttpClientTestServiceBase{
         return future.join();
     }
 
-    private String asyncPost() {
+    private String asyncPost(String parameterData) {
         RequestBody body = new FormBody.Builder()
             .add("userId", "5")
             .add("title", "Go")
             .add("body", "Advance")
+            .add("input",parameterData)
             .build();
         Request request = new Request.Builder().post(body).url(POST_URL).build();
         Call call = okHttpClient.newCall(request);
@@ -101,11 +102,12 @@ public class OkHttpTestService extends HttpClientTestServiceBase{
         }
     }
 
-    private String syncPost() {
+    private String syncPost(String parameterData) {
         RequestBody body = new FormBody.Builder()
                 .add("userId", "5")
                 .add("title", "Go")
                 .add("body", "Advance")
+                .add("input", parameterData)
                 .build();
         Request request = new Request.Builder().post(body).url(POST_URL).build();
         try {

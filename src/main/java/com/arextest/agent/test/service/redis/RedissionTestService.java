@@ -27,13 +27,13 @@ public class RedissionTestService {
         redissonClient = Redisson.create(config);
     }
 
-    public String testGetList() {
-        RList<String> rList = redissonClient.getList("my-list");
+    public String testGetList(String parameterData) {
+        RList<String> rList = redissonClient.getList(parameterData);
         return String.format("getList: %s", rList.add("bing"));
     }
 
-    public String testGetLock() {
-        RLock rLock = redissonClient.getLock("my-lock");
+    public String testGetLock(String parameterData) {
+        RLock rLock = redissonClient.getLock(parameterData);
         return String.format("getLock: %s", rLock.getName());
     }
 
