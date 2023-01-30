@@ -31,24 +31,24 @@ public class HelloController {
     @ResponseBody
     public String adminPost(@RequestBody Request request){
         String param = (request == null || StringUtil.isBlank(request.getInput())) ? "admin" : request.getInput();
-        return "{\"response\":\"hello \""+ param +"}";
+        return "{\"response\":\"hello "+ param +"\"}";
     }
     @RequestMapping(value = "/user/hello")
     @ResponseBody
     public String userPost(@RequestBody Request request){
         String param = (request == null || StringUtil.isBlank(request.getInput())) ? "user" : request.getInput();
-        return "{\"response\":\"hello \""+ param +"}";
+        return "{\"response\":\"hello "+ param +"\"}";
     }
     @RequestMapping(value = "/db/hello")
     @ResponseBody
     public String dbaPost(@RequestBody Request request){
         String param = (request == null || StringUtil.isBlank(request.getInput())) ? "dba" : request.getInput();
-        return "{\"response\":\"hello \""+ param +"}";
+        return "{\"response\":\"hello "+ param +"\"}";
     }
     @RequestMapping(value = "/hello")
     @ResponseBody
     public String helloPost(@RequestBody Request request){
         String param = (request == null || StringUtil.isBlank(request.getInput())) ? "welcome" : request.getInput();
-        return "{\"response\":\"hello \""+ param +"}";
+        return "{\"response\":\"hello "+ param +"\"}";
     }
 }
