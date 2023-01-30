@@ -1,5 +1,7 @@
 package com.arextest.agent.test.config;
 
+import com.arextest.agent.test.handler.*;
+import com.arextest.agent.test.security.JWTAuthenticationTokenFilter;
 import com.arextest.agent.test.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -7,18 +9,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.logout.LogoutHandler;
-import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.UUID;
 
 /**
  * @author daixq
@@ -29,6 +22,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    private UserAuthenticationEntryPointHandler userAuthenticationEntryPointHandler;
+
+    @Autowired
+    private UserLoginSuccessHandler userLoginSuccessHandler;
+
+    @Autowired
+    private UserLoginFailureHandler userLoginFailureHandler;
+
+    @Autowired
+    private UserLogoutSuccessHandler userLogoutSuccessHandler;
+
+    @Autowired
+    private UserAuthAccessDeniedHandler userAuthAccessDeniedHandler;
 
     @Bean
     PasswordEncoder passwordEncoder(){
@@ -50,44 +58,25 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/db/**")
                 .access("hasRole('dba') and hasRole('admin')")
                 .and()
-                .exceptionHandling().authenticationEntryPoint(new UnauthorizedEntryPoint()).and()
+                .exceptionHandling().authenticationEntryPoint(userAuthenticationEntryPointHandler).and()
+                .exceptionHandling().accessDeniedHandler(userAuthAccessDeniedHandler).and()
                 .formLogin()
                 .loginProcessingUrl("/login")
+                .successHandler(userLoginSuccessHandler)
+                .failureHandler(userLoginFailureHandler)
                 .permitAll()
-                .successHandler(new AuthenticationSuccessHandler() {
-                    @Override
-                    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
-                        response.setContentType("application/json;charset=utf-8");
-                        // create cookie
-                        Cookie cookie=new Cookie("Authentication", UUID.randomUUID().toString().replace("-",""));
-                        cookie.setMaxAge(24 * 60 * 60);
-                        response.addCookie(cookie);
-                        response.sendRedirect("/hello");
-                    }
-                })
                 .and()
                 .logout()
                 .logoutUrl("/logout")
                 .clearAuthentication(true)
                 .invalidateHttpSession(true)
                 .deleteCookies("Authentication")
-                .addLogoutHandler(new LogoutHandler() {
-                    @Override
-                    public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
-                    }
-                })
-                .logoutSuccessHandler(new LogoutSuccessHandler() {
-                    @Override
-                    public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
-                        response.setCharacterEncoding("utf-8");
-                        PrintWriter writer = response.getWriter();
-                        writer.write("{\"response\":\"logout successfully\"}");
-                        writer.flush();
-                        writer.close();
-                    }
-                })
+                .logoutSuccessHandler(userLogoutSuccessHandler)
                 .and()
                 .csrf()
                 .disable();
+        httpSecurity.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        httpSecurity.headers().cacheControl();
+        httpSecurity.addFilter(new JWTAuthenticationTokenFilter(authenticationManager()));
     }
 }

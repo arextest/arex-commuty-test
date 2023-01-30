@@ -5,10 +5,13 @@ import com.arextest.agent.test.entity.User;
 import com.arextest.agent.test.mapper.UserMapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,19 +26,17 @@ public class UserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException{
         QueryWrapper<User> wrapper = new QueryWrapper<>();
         wrapper.eq("username",username);
-        //根据页面传的用户名查找数据库判断是否存在该用户
-        User user = userMapper.selectOne(wrapper);
-        if (user==null){
-            throw new UsernameNotFoundException("用户不存在");
+        // check if user exist
+        User userInfo = userMapper.selectOne(wrapper);
+        if (userInfo==null){
+            throw new UsernameNotFoundException("user does not exist");
         }
-        List<Role> roles = userMapper.findRoles(user.getId());
-//        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-//        //遍历当前用户的角色集合组装权限
-//        for (Role role : roles) {
-//            authorities.add(new SimpleGrantedAuthority(role.getName()));
-//        }
-//        return new User(username,user.getPassword(),authorities);//如果用户没有角色会NullPointerException
-        user.setRoles(roles);
-        return user;
+        List<Role> roles = userMapper.findRoles(userInfo.getId());
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        // set roles
+        for (Role role : roles) {
+            authorities.add(new SimpleGrantedAuthority(role.getName()));
+        }
+        return new User(username,userInfo.getPassword(),authorities);
     }
 }
