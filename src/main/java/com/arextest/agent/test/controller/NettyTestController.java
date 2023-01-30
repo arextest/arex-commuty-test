@@ -22,7 +22,7 @@ public class NettyTestController {
 
     @RequestMapping (value = "/nettyTest")
     @ResponseBody
-    public String nettyTest(@RequestBody Request request) {
+    public String nettyTest(Request request) {
         String param = (request == null || StringUtil.isBlank(request.getInput())  ) ? "Hello World!" : request.getInput();
         return nettyTestService.nettyTest(param);
     }

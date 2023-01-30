@@ -21,14 +21,14 @@ public class RedissionTestController {
 
     @RequestMapping(value = "/getList")
     @ResponseBody
-    public String testGetList(@RequestBody Request request) {
+    public String testGetList(Request request) {
         String param = (request == null || StringUtil.isBlank(request.getInput())  ) ? "my-list" : request.getInput();
         return redissionTestService.testGetList(param);
     }
 
     @RequestMapping(value = "/getLock")
     @ResponseBody
-    public String testGetLock(@RequestBody Request request) {
+    public String testGetLock(Request request) {
         String param = (request == null || StringUtil.isBlank(request.getInput())  ) ? "my-lock" : request.getInput();
         return redissionTestService.testGetLock(param);
     }

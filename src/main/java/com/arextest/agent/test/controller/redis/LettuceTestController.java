@@ -18,7 +18,7 @@ public class LettuceTestController {
 
     @RequestMapping(value = "/renameException")
     @ResponseBody
-    public String testRenameException(@RequestBody Request request) {
+    public String testRenameException(Request request) {
         String param = (request == null || StringUtil.isBlank(request.getInput())  ) ? "hkey1" : request.getInput();
         return lettuceTestService.testRenameException(param);
     }

@@ -19,7 +19,7 @@ public class DynamicTestController {
 
     @RequestMapping (value = "/testException")
     @ResponseBody
-    public String testException(@RequestBody Request request) {
+    public String testException(Request request) {
         String param = (request == null || StringUtil.isBlank(request.getInput())  ) ? "D:/test.txt" : request.getInput();
         try {
             return dynamicService.readFile(param);

@@ -30,7 +30,7 @@ public class RedisTestController {
 
     @RequestMapping(value = "/jedis/set")
     @ResponseBody
-    public String testRedisSet(@RequestBody Request request) {
+    public String testRedisSet(Request request) {
         String param = (request == null || StringUtil.isBlank(request.getInput())  ) ? "" : request.getInput();
         return jedisTestService.testSet(param);
     }

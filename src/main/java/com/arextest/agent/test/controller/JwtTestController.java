@@ -22,7 +22,7 @@ public class JwtTestController {
 
     @RequestMapping (value = "/jwt")
     @ResponseBody
-    public String jwtTest(@RequestBody Request request) {
+    public String jwtTest(Request request) {
         String param = (request == null || StringUtil.isBlank(request.getInput())  ) ? "credential" : request.getInput();
         return jwtTestService.testJwt(param);
     }

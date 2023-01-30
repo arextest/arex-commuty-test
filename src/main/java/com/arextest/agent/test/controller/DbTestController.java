@@ -28,7 +28,7 @@ public class DbTestController {
 
     @RequestMapping (value = "/mybatis/query")
     @ResponseBody
-    public String mybatisQueryTest(@RequestBody Request request) {
+    public String mybatisQueryTest(Request request) {
         String param = (request == null || StringUtil.isBlank(request.getInput())  ) ? "ravioli" : request.getInput();
         return mybatisTestService.testMybatisQuery(param);
     }
@@ -89,7 +89,7 @@ public class DbTestController {
 
     @RequestMapping (value = "/hibernate/findById")
     @ResponseBody
-    public String hibernateFindByIdTest(@RequestBody Request request) {
+    public String hibernateFindByIdTest(Request request) {
         String param = (request == null || StringUtil.isBlank(request.getInput())  ) ? "0" : request.getInput();
         return hibernateTestService.testHibernateFindById(Integer.parseInt(param));
     }

@@ -33,28 +33,28 @@ public class HttpClientTestController {
 
     @RequestMapping(value = "/commonClient")
     @ResponseBody
-    public String commonClientTest(@RequestBody Request request) {
+    public String commonClientTest(Request request) {
         String param = (request == null || StringUtil.isBlank(request.getInput())  ) ? "{\"userId\": 3, \"title\": \"Programmer\", \"body\":\"C++\"}" : request.getInput();
         return commonClientTestService.commonClientTest(param);
     }
 
     @RequestMapping(value = "/restTemplate")
     @ResponseBody
-    public String restTemplate(@RequestBody Request request) throws InterruptedException {
+    public String restTemplate(Request request) throws InterruptedException {
         String param = (request == null || StringUtil.isBlank(request.getInput())  ) ? "Hi_Friend" : request.getInput();
         return restTemplateTestService.restTemplateTest(param);
     }
 
     @RequestMapping(value = "/okHttp")
     @ResponseBody
-    public String okHttp(@RequestBody Request request) {
+    public String okHttp(Request request) {
         String param = (request == null || StringUtil.isBlank(request.getInput())  ) ? "Hi_Friend" : request.getInput();
         return okHttpTestService.okHttpTest(param);
     }
 
     @RequestMapping(value = "/apacheClient")
     @ResponseBody
-    public String apacheClient(@RequestBody Request request) throws IOException, ExecutionException, InterruptedException {
+    public String apacheClient(Request request) throws IOException, ExecutionException, InterruptedException {
         String param = (request == null || StringUtil.isBlank(request.getInput())  ) ? "Hi_Friend" : request.getInput();
         return apacheHttpClientTestService.test(param);
     }
