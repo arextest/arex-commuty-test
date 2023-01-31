@@ -9,21 +9,20 @@ import org.springframework.web.bind.annotation.*;
  * @date 2023/01/12
  */
 @RestController
-@RequestMapping(value = "/hello")
 public class HelloController {
-    @RequestMapping(value = "/admin")
+    @RequestMapping(value = "/admin/hello")
     @ResponseBody
     public String adminPost(Request request){
         String param = (request == null || StringUtil.isBlank(request.getInput())) ? "admin" : request.getInput();
         return "{\"response\":\"hello "+ param +"\"}";
     }
-    @RequestMapping(value = "/user")
+    @RequestMapping(value = "/user/hello")
     @ResponseBody
     public String userPost(Request request){
         String param = (request == null || StringUtil.isBlank(request.getInput())) ? "user" : request.getInput();
         return "{\"response\":\"hello "+ param +"\"}";
     }
-    @RequestMapping(value = "/db")
+    @RequestMapping(value = "/db/hello")
     @ResponseBody
     public String dbaPost(Request request){
         String param = (request == null || StringUtil.isBlank(request.getInput())) ? "dba" : request.getInput();
