@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import reactor.util.annotation.Nullable;
 
 /**
  * @author daixq
@@ -21,14 +22,14 @@ public class RedissionTestController {
 
     @RequestMapping(value = "/getList")
     @ResponseBody
-    public String testGetList(Request request) {
+    public String testGetList(@Nullable @RequestBody Request request) {
         String param = (request == null || StringUtil.isBlank(request.getInput())  ) ? "my-list" : request.getInput();
         return redissionTestService.testGetList(param);
     }
 
     @RequestMapping(value = "/getLock")
     @ResponseBody
-    public String testGetLock(Request request) {
+    public String testGetLock(@Nullable @RequestBody Request request) {
         String param = (request == null || StringUtil.isBlank(request.getInput())  ) ? "my-lock" : request.getInput();
         return redissionTestService.testGetLock(param);
     }

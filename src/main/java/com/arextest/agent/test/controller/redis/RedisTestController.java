@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import javax.annotation.PostConstruct;
+import reactor.util.annotation.Nullable;
 /**
  * @author yongwuhe
  * @date 2022/10/20
@@ -30,7 +31,7 @@ public class RedisTestController {
 
     @RequestMapping(value = "/jedis/set")
     @ResponseBody
-    public String testRedisSet(Request request) {
+    public String testRedisSet(@Nullable @RequestBody Request request) {
         String param = (request == null || StringUtil.isBlank(request.getInput())  ) ? "" : request.getInput();
         return jedisTestService.testSet(param);
     }

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
-
+import reactor.util.annotation.Nullable;
 /**
  * @author yongwuhe
  * @date 2022/11/01
@@ -33,28 +33,28 @@ public class HttpClientTestController {
 
     @RequestMapping(value = "/commonClient")
     @ResponseBody
-    public String commonClientTest(Request request) {
+    public String commonClientTest(@Nullable @RequestBody Request request) {
         String param = (request == null || StringUtil.isBlank(request.getInput())  ) ? "{\"userId\": 3, \"title\": \"Programmer\", \"body\":\"C++\"}" : request.getInput();
         return commonClientTestService.commonClientTest(param);
     }
 
     @RequestMapping(value = "/restTemplate")
     @ResponseBody
-    public String restTemplate(Request request) throws InterruptedException {
+    public String restTemplate(@Nullable @RequestBody Request request) throws InterruptedException {
         String param = (request == null || StringUtil.isBlank(request.getInput())  ) ? "Hi_Friend" : request.getInput();
         return restTemplateTestService.restTemplateTest(param);
     }
 
     @RequestMapping(value = "/okHttp")
     @ResponseBody
-    public String okHttp(Request request) {
+    public String okHttp(@Nullable @RequestBody Request request) {
         String param = (request == null || StringUtil.isBlank(request.getInput())  ) ? "Hi_Friend" : request.getInput();
         return okHttpTestService.okHttpTest(param);
     }
 
     @RequestMapping(value = "/apacheClient")
     @ResponseBody
-    public String apacheClient(Request request) throws IOException, ExecutionException, InterruptedException {
+    public String apacheClient(@Nullable @RequestBody Request request) throws IOException, ExecutionException, InterruptedException {
         String param = (request == null || StringUtil.isBlank(request.getInput())  ) ? "Hi_Friend" : request.getInput();
         return apacheHttpClientTestService.test(param);
     }

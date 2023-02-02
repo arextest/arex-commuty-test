@@ -11,7 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
+import reactor.util.annotation.Nullable;
 /**
  * @author yongwuhe
  * @date 2022/11/05
@@ -28,7 +28,7 @@ public class DbTestController {
 
     @RequestMapping (value = "/mybatis/query")
     @ResponseBody
-    public String mybatisQueryTest(Request request) {
+    public String mybatisQueryTest(@Nullable @RequestBody Request request) {
         String param = (request == null || StringUtil.isBlank(request.getInput())  ) ? "ravioli" : request.getInput();
         return mybatisTestService.testMybatisQuery(param);
     }
@@ -89,7 +89,7 @@ public class DbTestController {
 
     @RequestMapping (value = "/hibernate/findById")
     @ResponseBody
-    public String hibernateFindByIdTest(Request request) {
+    public String hibernateFindByIdTest(@Nullable @RequestBody Request request) {
         String param = (request == null || StringUtil.isBlank(request.getInput())  ) ? "0" : request.getInput();
         return hibernateTestService.testHibernateFindById(Integer.parseInt(param));
     }

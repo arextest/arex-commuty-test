@@ -8,7 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
+import reactor.util.annotation.Nullable;
 /**
  * @author daixq
  * @date 2022/11/09
@@ -22,7 +22,7 @@ public class NettyTestController {
 
     @RequestMapping (value = "/nettyTest")
     @ResponseBody
-    public String nettyTest(Request request) {
+    public String nettyTest(@Nullable @RequestBody Request request) {
         String param = (request == null || StringUtil.isBlank(request.getInput())  ) ? "Hello World!" : request.getInput();
         return nettyTestService.nettyTest(param);
     }
