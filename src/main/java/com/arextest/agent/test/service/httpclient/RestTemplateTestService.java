@@ -1,7 +1,6 @@
 package com.arextest.agent.test.service.httpclient;
 
 import com.arextest.agent.test.entity.HttpMethodEnum;
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
@@ -23,23 +22,10 @@ public class RestTemplateTestService extends HttpClientTestServiceBase{
     private static String asyncGetResponse, asyncPostResponse;
 
     public String restTemplateTest(String parameterData) {
-        asyncRestTemplate(parameterData);
+        // asyncRestTemplate(parameterData);
         String getResponse = restTemplate(HttpMethodEnum.GET, parameterData);
         String postResponse = restTemplate(HttpMethodEnum.POST, parameterData);
-        // wait async operation finish
-        int cur = 0, loop = 20;
-        while ((StringUtils.isEmpty(asyncGetResponse) || StringUtils.isEmpty(asyncPostResponse)) && cur < loop) {
-            cur++;
-            log.info("asyncGetResponse || asyncPostResponse is empty");
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException ex) {
-                log.error("InterruptedException", ex);
-            }
-        }
-        String sb = String.format("restTemplate get response: %s, restTemplate post response: %s", getResponse, postResponse) +
-                String.format("WebClient async get response: %s, WebClient async post response: %s", asyncGetResponse, asyncPostResponse);
-        return sb;
+        return String.format("restTemplate get response: %s, restTemplate post response: %s", getResponse, postResponse);
     }
 
     private String restTemplate(HttpMethodEnum type, String input) {
