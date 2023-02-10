@@ -23,6 +23,7 @@ import java.util.Map;
 public class UserLoginSuccessHandler implements AuthenticationSuccessHandler {
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication){
+        log.info("[login] successfully, create jwt token");
         // create JWT token
         User user = (User) authentication.getPrincipal();
         String token = JwtTokenUtil.createAccessToken(user);

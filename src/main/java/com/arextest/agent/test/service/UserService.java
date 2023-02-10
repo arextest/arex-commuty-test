@@ -4,6 +4,7 @@ import com.arextest.agent.test.entity.Role;
 import com.arextest.agent.test.entity.User;
 import com.arextest.agent.test.mapper.UserMapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -19,11 +20,13 @@ import java.util.List;
  * @date 2023/01/12
  */
 @Service
+@Slf4j
 public class UserService implements UserDetailsService {
     @Autowired
     UserMapper userMapper;
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException{
+        log.info("[loadUserByUsername]");
         QueryWrapper<User> wrapper = new QueryWrapper<>();
         wrapper.eq("username",username);
         // check if user exist

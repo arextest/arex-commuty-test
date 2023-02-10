@@ -21,6 +21,7 @@ import com.arextest.agent.test.util.ResultUtil;
 public class UserLoginFailureHandler implements AuthenticationFailureHandler {
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception){
+        log.info("[login failed]");
         if (exception instanceof UsernameNotFoundException){
             log.info("[login failed]"+exception.getMessage());
             ResultUtil.responseJson(response,ResultUtil.resultCode(500,"user does not exist"));
