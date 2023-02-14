@@ -1,8 +1,8 @@
 package com.arextest.agent.test.security;
 
-import com.alibaba.fastjson.JSONObject;
 import com.arextest.agent.test.config.JWTConfig;
 import com.arextest.agent.test.entity.User;
+import com.arextest.agent.test.util.JsonUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -55,7 +55,7 @@ public class JWTAuthenticationTokenFilter extends BasicAuthenticationFilter {
                     List<GrantedAuthority> authorities = new ArrayList<>();
                     String authority = claims.get("authorities").toString();
                     if(!StringUtils.isEmpty(authority)){
-                        List<Map<String,String>> authorityMap = JSONObject.parseObject(authority, List.class);
+                        List<Map<String,String>> authorityMap = JsonUtil.parseJson(authority, List.class);
                         for(Map<String,String> role : authorityMap){
                             if(!StringUtils.isEmpty(role)) {
                                 authorities.add(new SimpleGrantedAuthority(role.get("authority")));

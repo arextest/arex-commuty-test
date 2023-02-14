@@ -1,6 +1,5 @@
 package com.arextest.agent.test.util;
 
-import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import javax.servlet.ServletResponse;
 import java.io.PrintWriter;
@@ -21,7 +20,7 @@ public class ResultUtil {
             response.setCharacterEncoding("UTF-8");
             response.setContentType("application/json");
             out = response.getWriter();
-            out.println(JSON.toJSONString(resultMap));
+            out.println(JsonUtil.toJson(resultMap));
         } catch (Exception ex) {
             log.error("[responseJson]" + ex);
         } finally {

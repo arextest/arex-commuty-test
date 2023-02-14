@@ -26,13 +26,19 @@ public class UserService implements UserDetailsService {
     UserMapper userMapper;
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException{
-        log.info("[loadUserByUsername]");
+        String prefix = "[loadUserByUsername], user: " + username;
+        log.info(prefix);
         QueryWrapper<User> wrapper = new QueryWrapper<>();
         wrapper.eq("username",username);
         // check if user exist
-        User userInfo = userMapper.selectOne(wrapper);
-        if (userInfo==null){
-            throw new UsernameNotFoundException("user does not exist");
+        User userInfo = null;
+        try {
+            userInfo = userMapper.selectOne(wrapper);
+        } catch (Exception ex) {
+            log.error(prefix, ex);
+        }
+        if (userInfo == null){
+            throw new UsernameNotFoundException(prefix + " does not exist");
         }
         List<Role> roles = userMapper.findRoles(userInfo.getId());
         List<GrantedAuthority> authorities = new ArrayList<>();
