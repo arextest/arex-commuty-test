@@ -80,23 +80,10 @@ public class DynamicTestController {
     @RequestMapping (value = "/testReturnListenableFuture")
     @ResponseBody
     public String testReturnListenableFuture() {
-        com.google.common.util.concurrent.ListeningExecutorService executorService = com.google.common.util.concurrent.MoreExecutors
-                .listeningDecorator(java.util.concurrent.Executors.newCachedThreadPool());
-
-        final com.google.common.util.concurrent.ListenableFuture<List<Mealrecomrestaurant>> listenableFuture = executorService
-                .submit(() -> {
-                    QueryWrapper<Mealrecomrestaurant> queryWrapper = new QueryWrapper<>();
-                    queryWrapper.lambda().eq(Mealrecomrestaurant::getRestaurantName, "FOOD");
-                    return plusMapper.selectList(queryWrapper);
-                });
+        com.google.common.util.concurrent.ListenableFuture<List<Mealrecomrestaurant>> listenableFuture
+                = dynamicService.getRestaurantsAsListenableFuture();
 
         String restaurantNumber = "query failed";
-        listenableFuture.addListener(new Runnable() {
-            @Override
-            public void run() {
-                log.info("future.get"," Done");
-            }
-        }, executorService);
 
         while (!listenableFuture.isDone()){
             log.info("future.get", " Doing...");

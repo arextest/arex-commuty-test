@@ -44,4 +44,13 @@ public class DynamicService {
                 });
     }
 
+    public com.google.common.util.concurrent.ListenableFuture<List<Mealrecomrestaurant>> getRestaurantsAsListenableFuture() {
+        return  MoreExecutors.listeningDecorator(java.util.concurrent.Executors.newCachedThreadPool()).submit(
+                () -> {
+                    QueryWrapper<Mealrecomrestaurant> queryWrapper = new QueryWrapper<>();
+                    queryWrapper.lambda().eq(Mealrecomrestaurant::getRestaurantName, "FOOD");
+                    return plusMapper.selectList(queryWrapper);
+                });
+        }
+
 }
