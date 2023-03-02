@@ -3,13 +3,12 @@ package com.arextest.agent.test.service.httpclient;
 import com.arextest.agent.test.entity.HttpMethodEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
+
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.zip.GZIPInputStream;
 
 /**
  * @author yongwuhe
@@ -18,13 +17,13 @@ import java.nio.charset.StandardCharsets;
 @Component
 public class CommonClientTestService extends HttpClientTestServiceBase{
 
-    public String commonClientTest(String parameterData) {
-        String commonHttpClientGetResponse = commonHttpClient(HttpMethodEnum.GET, parameterData);
-        String commonHttpClientPostResponse = commonHttpClient(HttpMethodEnum.POST, parameterData);
+    public String commonClientTest(String parameterData, boolean isGzip) {
+        String commonHttpClientGetResponse = commonHttpClient(HttpMethodEnum.GET, parameterData,isGzip);
+        String commonHttpClientPostResponse = commonHttpClient(HttpMethodEnum.POST, parameterData, isGzip);
         return String.format("commonClientGetResponse: %s, commonHttpClientPostResponse: %s", commonHttpClientGetResponse, commonHttpClientPostResponse);
     }
 
-    private String commonHttpClient(HttpMethodEnum type, String parameterData) {
+    private String commonHttpClient(HttpMethodEnum type, String parameterData, boolean isGzip) {
         HttpURLConnection connection;
         String result = null;
 
@@ -49,6 +48,10 @@ public class CommonClientTestService extends HttpClientTestServiceBase{
             connection.setReadTimeout(10000);
             connection.setDoInput(true);
             connection.setRequestProperty("Content-Type", "application/json");
+            if(isGzip){
+                connection.setRequestProperty("accept-encoding","gzip, deflate, br");
+            }
+
 
             if (type.equals(HttpMethodEnum.POST)) {
 //                String parameterData = "{\"userId\": 3, \"title\": \"Programmer\", \"body\":\"C++\"}";
@@ -59,8 +62,18 @@ public class CommonClientTestService extends HttpClientTestServiceBase{
                 dataOutputStream.close();
             }
 
-            try (Reader isr = new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8);
-                 BufferedReader br = new BufferedReader(isr)) {
+            InputStream is = null;
+
+            try {
+                String contentEncoding = connection.getHeaderField("content-encoding");
+                if((contentEncoding != null)&&(contentEncoding.equals("gzip"))){
+                    is = new GZIPInputStream(connection.getInputStream());
+                }else{
+                    is = connection.getInputStream();
+                }
+
+                Reader isr = new InputStreamReader(is, StandardCharsets.UTF_8);
+                BufferedReader br = new BufferedReader(isr);
 
                 StringBuilder sbf = new StringBuilder();
                 String temp;

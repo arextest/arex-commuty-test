@@ -35,7 +35,14 @@ public class HttpClientTestController {
     @ResponseBody
     public String commonClientTest(@Nullable @RequestBody Request request) {
         String param = (request == null || StringUtil.isBlank(request.getInput())  ) ? "{\"userId\": 3, \"title\": \"Programmer\", \"body\":\"C++\"}" : request.getInput();
-        return commonClientTestService.commonClientTest(param);
+        return commonClientTestService.commonClientTest(param,false);
+    }
+
+    @RequestMapping(value = "/commonClientGzip")
+    @ResponseBody
+    public String commonClientGzipTest(@Nullable @RequestBody Request request) {
+        String param = (request == null || StringUtil.isBlank(request.getInput())  ) ? "{\"userId\": 3, \"title\": \"Programmer\", \"body\":\"C++\"}" : request.getInput();
+        return commonClientTestService.commonClientTest(param,true);
     }
 
     @RequestMapping(value = "/restTemplate")
