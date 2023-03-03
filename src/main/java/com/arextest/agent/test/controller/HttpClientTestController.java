@@ -63,6 +63,7 @@ public class HttpClientTestController {
     @ResponseBody
     public String apacheClient(@Nullable @RequestBody Request request) throws IOException, ExecutionException, InterruptedException {
         String param = (request == null || StringUtil.isBlank(request.getInput())  ) ? "Hi_Friend" : request.getInput();
-        return apacheHttpClientTestService.test(param);
+        return param.equals("Gzip") ? apacheHttpClientTestService.testGzip() : apacheHttpClientTestService.test(param);
     }
+
 }

@@ -19,7 +19,9 @@ import org.apache.http.impl.nio.client.HttpAsyncClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.springframework.stereotype.Component;
+import org.springframework.http.HttpHeaders;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -27,6 +29,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.nio.charset.StandardCharsets;
+import org.apache.http.entity.ByteArrayEntity;
+import org.apache.http.client.entity.GzipCompressingEntity;
+import java.util.Base64;
+import java.util.zip.GZIPOutputStream;
+
+import static org.apache.logging.log4j.message.MapMessage.MapFormat.JSON;
 
 /**
  * @author yongwuhe
@@ -58,6 +67,48 @@ public class ApacheHttpClientTestService extends HttpClientTestServiceBase {
                 asyncPostResponse + "\n" +
                 syncGetResponse + "\n" +
                 syncPostResponse + "\n";
+    }
+
+    public String testGzip(){
+        return  syncPostGzip1();
+    }
+
+    private String syncPostGzip1() {
+        String result;
+        String request = null;
+        String input = "{\"userId\":\"5\", \"title\":\"json\", \"body\":\"learning\"}";
+
+        HttpPost httpPost = new HttpPost(String.format(POST_URL));
+        httpPost.setConfig(createRequestConfig());
+        try {
+            ByteArrayEntity byteArrayEntity = new ByteArrayEntity(input.getBytes(StandardCharsets.UTF_8));
+            GzipCompressingEntity gzippedEntity = new GzipCompressingEntity(byteArrayEntity);
+            httpPost.setEntity(gzippedEntity);
+            httpPost.setHeader(HttpHeaders.CONTENT_TYPE, "application/json;charset=UTF-8");
+            httpPost.setHeader(HttpHeaders.ACCEPT, "application/json");
+            httpPost.setHeader(gzippedEntity.getContentEncoding());
+        } catch (Exception ex) {
+            log.error("UnsupportedEncodingException", ex);
+        }
+        try (
+                CloseableHttpClient httpClient = HttpClients.createDefault();
+                CloseableHttpResponse response = httpClient.execute(httpPost);
+        ) {
+
+            try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()){
+                httpPost.getEntity().writeTo(byteArrayOutputStream);
+                request = Base64.getEncoder().encodeToString(byteArrayOutputStream.toByteArray());
+                System.out.printf("syncPostGzip1: %s\n", request);
+            } catch (Exception e) {
+                System.out.println("syncPostGzip1 read request exception: " + e.getMessage());
+            }
+
+            result = EntityUtils.toString(response.getEntity(),StandardCharsets.UTF_8);
+        } catch (Exception ex) {
+            result = "apacheHttpClientPost exception: " + ex.getMessage();
+        }
+        return "syncPostGzip1 request: " + request + "\n"
+                +  "syncPostGzip1 response: " + result;
     }
 
     private String syncGet() {
