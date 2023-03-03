@@ -24,6 +24,7 @@ import com.google.common.util.concurrent.FutureCallback;
 @Slf4j
 @RequestMapping(value = "/dynamicTest")
 public class DynamicTestController {
+
     @Autowired
     MybatisPlusMapper plusMapper;
     @Autowired
@@ -35,6 +36,47 @@ public class DynamicTestController {
         String param = (request == null || StringUtil.isBlank(request.getInput())  ) ? "D:/test.txt" : request.getInput();
         try {
             return dynamicService.readFile(param);
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+    }
+
+    @RequestMapping (value = "/testRandomInt")
+    @ResponseBody
+    public String testRandomInt(@Nullable @RequestBody Request request) {
+        try {
+            return dynamicService.getRandomInt();
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+    }
+
+    @RequestMapping (value = "/testUuid")
+    @ResponseBody
+    public String testUuid(@Nullable @RequestBody Request request) {
+        try {
+            return dynamicService.getUuid();
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+    }
+
+    @RequestMapping (value = "/testCurentTime")
+    @ResponseBody
+    public String testCurentTime(@Nullable @RequestBody Request request) {
+        try {
+            return dynamicService.getCurrentTime();
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+    }
+
+    @RequestMapping (value = "/testOptionClass")
+    @ResponseBody
+    public String testOptionClass(@Nullable @RequestBody Request request) {
+        try {
+            Integer value = 300;
+            return dynamicService.optionTest(value);
         } catch (Exception e) {
             return e.getMessage();
         }

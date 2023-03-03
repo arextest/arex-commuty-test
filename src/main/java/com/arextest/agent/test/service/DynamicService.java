@@ -3,6 +3,8 @@ package com.arextest.agent.test.service;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -17,7 +19,14 @@ import org.springframework.util.concurrent.ListenableFuture;
 
 
 @Service
-public class DynamicService {
+public class DynamicService<T> {
+
+    public DynamicService(){
+        getRandomInt();
+        getUuid();
+        getCurrentTime();
+    }
+
     @Autowired
     MybatisPlusMapper plusMapper;
 
@@ -53,4 +62,22 @@ public class DynamicService {
                 });
         }
 
+    public String getRandomInt() {
+        Random rm = new Random();
+        int n = rm.nextInt();
+        return "Random number : " + String.valueOf(n);
+    }
+
+    public String getUuid() {
+        String uuid = UUID.randomUUID().toString();
+        return "uuid : " + String.valueOf(uuid);
+    }
+
+    public String getCurrentTime() {
+        return "current time : " + String.valueOf(java.lang.System.currentTimeMillis());
+    }
+
+    public String optionTest(T t){
+        return "T Int value is " + t;
+    }
 }
