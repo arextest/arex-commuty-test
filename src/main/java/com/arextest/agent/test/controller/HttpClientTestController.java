@@ -31,6 +31,9 @@ public class HttpClientTestController {
     @Autowired
     ApacheHttpClientTestService apacheHttpClientTestService;
 
+    @Autowired
+    WebClientTestService webClientTestService;
+
     @RequestMapping(value = "/commonClient")
     @ResponseBody
     public String commonClientTest(@Nullable @RequestBody Request request) {
@@ -66,4 +69,10 @@ public class HttpClientTestController {
         return param.equals("Gzip") ? apacheHttpClientTestService.testGzip() : apacheHttpClientTestService.test(param);
     }
 
+    @RequestMapping(value = "/webClient")
+    @ResponseBody
+    public String webClient(@Nullable @RequestBody Request request) throws InterruptedException {
+        String param = (request == null || StringUtil.isBlank(request.getInput())  ) ? "Hi_Friend" : request.getInput();
+        return webClientTestService.asyncWebClientTest(param);
+    }
 }

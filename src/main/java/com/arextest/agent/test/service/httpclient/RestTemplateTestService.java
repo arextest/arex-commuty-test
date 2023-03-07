@@ -3,11 +3,7 @@ package com.arextest.agent.test.service.httpclient;
 import com.arextest.agent.test.entity.HttpMethodEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.reactive.function.BodyInserters;
-import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,7 +18,6 @@ public class RestTemplateTestService extends HttpClientTestServiceBase{
     private static String asyncGetResponse, asyncPostResponse;
 
     public String restTemplateTest(String parameterData) {
-        // asyncRestTemplate(parameterData);
         String getResponse = restTemplate(HttpMethodEnum.GET, parameterData);
         String postResponse = restTemplate(HttpMethodEnum.POST, parameterData);
         return String.format("restTemplate get response: %s, restTemplate post response: %s", getResponse, postResponse);
@@ -47,33 +42,4 @@ public class RestTemplateTestService extends HttpClientTestServiceBase{
         return response;
     }
 
-    /**
-     * Async invoke. AsyncRestTemplate is deprecated, instead use the WebClient
-     * @return
-     */
-    private void asyncRestTemplate(String input) {
-        asyncGetResponse = "";
-        WebClient webClient = WebClient.create();
-
-        // get
-        Mono<String> mono = webClient.get().uri(GET_URL).retrieve().bodyToMono(String.class);
-        mono.subscribe(RestTemplateTestService::handleAsyncGetResponse);
-
-        // post, with parameters
-        LinkedMultiValueMap map = new LinkedMultiValueMap();
-        map.add("userId", "1");
-        map.add("title", "java");
-        map.add("body", "spring");
-        map.add("input", input);
-        mono = webClient.post().uri(POST_URL).body(BodyInserters.fromFormData(map)).retrieve().bodyToMono(String.class);
-        mono.subscribe(RestTemplateTestService::handleAsyncPostResponse);
-    }
-
-    private static void handleAsyncGetResponse(String result) {
-        asyncGetResponse = result;
-    }
-
-    private static void handleAsyncPostResponse(String result) {
-        asyncPostResponse = result;
-    }
 }
