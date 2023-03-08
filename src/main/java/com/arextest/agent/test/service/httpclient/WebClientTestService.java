@@ -23,6 +23,7 @@ public class WebClientTestService extends HttpClientTestServiceBase{
         // get
         Mono<String> mono = webClient.get().uri(GET_URL).retrieve().bodyToMono(String.class);
         mono.subscribe(WebClientTestService::handleAsyncGetResponse);
+        asyncGetResponse= mono.block();
 
         // post, with parameters
         LinkedMultiValueMap map = new LinkedMultiValueMap();
@@ -32,12 +33,10 @@ public class WebClientTestService extends HttpClientTestServiceBase{
         map.add("input", input);
         mono = webClient.post().uri(POST_URL).body(BodyInserters.fromFormData(map)).retrieve().bodyToMono(String.class);
         mono.subscribe(WebClientTestService::handleAsyncPostResponse);
+        asyncPostResponse = mono.block();
 
         return  "AsyncGetResponse:" + asyncGetResponse + ";" + "\n" +
-                "AsyncPostResponse:" + asyncPostResponse + ";" + "\n" +
-                "After waite for some miniutes:" +"\n" +
-                "AsyncGetResponse:" + mono.toString() + ";" + "\n" +
-                "AsyncPostResponse:" + map.toString() + ";" + "\n";
+                "AsyncPostResponse:" + asyncPostResponse + ";" + "\n" ;
     }
 
     private static void handleAsyncGetResponse(String result) {
